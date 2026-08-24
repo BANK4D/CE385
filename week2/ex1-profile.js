@@ -3,10 +3,10 @@
 
 // ประกาศตัวแปรข้อมูลส่วนตัวด้วย const (ห้ามใช้ var)
 const studentId = "67112211";
-const firstName = "สมชาย";
-const lastName = "ใจดี";
+const firstName = "ธนบดี";
+const lastName = "หมื่นไกรทอง";
 const major = "วิศวกรรมคอมพิวเตอร์";
-const year = 2;
+const year = 3;
 
 // ใช้ Template Literal (backtick + ${}) แทนการต่อ string ด้วย +
 const introText = `สวัสดีครับ ผมชื่อ ${firstName} ${lastName}

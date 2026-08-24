@@ -2,8 +2,8 @@
 // แบบฝึกหัด: ชนิดข้อมูล (Data Types) และการใช้ typeof, null vs undefined
 
 // ตัวแปรแต่ละชนิดข้อมูลพื้นฐานใน JavaScript
-const studentName = "สมหญิง";      // String
-const studentAge = 20;              // Number
+const studentName = "ธนบดี";      // String
+const studentAge = 22;              // Number
 const isPassed = true;              // Boolean
 const scores = [85, 90, 78];        // Object (Array)
 const studentInfo = {               // Object
