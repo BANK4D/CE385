@@ -1,33 +1,39 @@
-// ex3-calculator.js
-// แบบฝึกหัด: เครื่องคิดเลขคะแนน โดยใช้ตัวดำเนินการคณิตศาสตร์ และ toFixed
+// กำหนดคะแนนที่ใช้ในการคำนวณ
+const workshopRaw = 48;
+const attendance = 9;
+const project = 17;
+const midterm = 15;
+const final = 24;
 
-// คะแนนแต่ละส่วนของวิชา (เต็ม 100)
-const quizScore = 18;      // เต็ม 20
-const midtermScore = 27;   // เต็ม 30
-const finalScore = 42;     // เต็ม 50
+// กำหนดคะแนนเต็มและค่าคงที่สำหรับการคำนวณ
+const workshopFullScore = 60;
+const workshopWeight = 20;
+const totalScore = 100;
+const targetScore = 80;
 
-// รวมคะแนนทั้งหมดด้วยตัวดำเนินการ +
-const totalScore = quizScore + midtermScore + finalScore;
-console.log(`คะแนนรวม: ${totalScore} / 100`);
+// สูตรแปลงคะแนน Workshop จากคะแนนเต็ม 60 ให้เป็นคะแนนเต็ม 20
+// นำคะแนนที่ได้หารด้วยคะแนนเต็ม แล้วคูณด้วยคะแนนเต็มของสัดส่วน
+const workshopScore = (workshopRaw / workshopFullScore) * workshopWeight;
 
-// คำนวณเปอร์เซ็นต์ด้วย / และ *
-const percentage = (totalScore / 100) * 100;
-console.log(`คิดเป็น: ${percentage}%`);
+// สูตรหาคะแนนรวม คือ นำคะแนนทุกส่วนมาบวกกัน
+const sumScore = workshopScore + attendance + project + midterm + final;
 
-// toFixed() ใช้ปัดทศนิยม คืนค่าเป็น string ที่มีจุดทศนิยมตามจำนวนที่กำหนด
-const average = totalScore / 3; // เฉลี่ย 3 ส่วน
-console.log(`คะแนนเฉลี่ยต่อส่วน: ${average.toFixed(2)}`); // ทศนิยม 2 ตำแหน่ง
+// สูตรหาเปอร์เซ็นต์ คือ คะแนนรวม หารด้วยคะแนนเต็ม แล้วคูณ 100
+const percentage = (sumScore / totalScore) * 100;
 
-// ตัวอย่างตัวดำเนินการอื่น ๆ
-const bonusPoint = 2;
-const finalTotal = totalScore + bonusPoint; // บวกคะแนนพิเศษ
-const remainder = finalTotal % 10;          // หารเอาเศษ (modulo)
-const squared = 5 ** 2;                     // ยกกำลัง
+// สูตรหาคะแนนที่ขาดจากเป้าหมาย 80 คะแนน
+const difference = targetScore - sumScore;
 
-console.log(`คะแนนรวม + โบนัส: ${finalTotal}`);
-console.log(`เศษจากการหาร 10: ${remainder}`);
-console.log(`ตัวอย่างยกกำลัง 5^2 = ${squared}`);
-
-// toFixed กับทศนิยมยาว ๆ เพื่อให้อ่านง่ายในการแสดงผล
-const pi = 3.14159265;
-console.log(`ค่า pi ปัดเหลือ 2 ตำแหน่ง: ${pi.toFixed(2)}`);
+// แสดงผลด้วย Template Literal
+console.log(`===== สรุปคะแนน CE385 =====
+Workshop       : ${workshopScore.toFixed(2)} / 20
+Attendance      : ${attendance} / 10
+Project         : ${project} / 20
+Midterm         : ${midterm} / 20
+Final           : ${final} / 30
+คะแนนรวม        : ${sumScore.toFixed(2)} / 100
+เปอร์เซ็นต์      : ${percentage.toFixed(2)}%
+เป้าหมาย 80 คะแนน : ${difference > 0
+  ? `ขาดอีก ${difference.toFixed(2)} คะแนน`
+  : `เกินเป้าหมาย ${Math.abs(difference).toFixed(2)} คะแนน`
+}`);

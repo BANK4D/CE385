@@ -1,58 +1,49 @@
-// ex6-login.js
-// แบบฝึกหัด: ระบบตรวจสอบสิทธิ์ โดยใช้ &&, ||, ===
+// ฟังก์ชันตรวจสอบสิทธิ์การเข้าสู่ระบบ
+function login(inputUser, inputPass, role, isActive, age) {
 
-// ข้อมูลผู้ใช้จำลอง (เก็บใน object)
-const registeredUser = {
-  username: "student01",
-  password: "1234abcd",
-  role: "student",
-  isActive: true,
-};
+    // 1. ตรวจสอบ username หรือ password ก่อน
+    if (inputUser !== "admin" || inputPass !== "ce385pass") {
+        return "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
+    }
 
-// ฟังก์ชันตรวจสอบการ login
-function login(username, password) {
-  // ใช้ === เปรียบเทียบค่าแบบเข้มงวด (strict equality) ทั้ง username และ password
-  const isUsernameCorrect = username === registeredUser.username;
-  const isPasswordCorrect = password === registeredUser.password;
+    // 2. ตรวจสอบว่าบัญชีถูกระงับหรือไม่
+    if (isActive === false) {
+        return "บัญชีนี้ถูกระงับการใช้งาน";
+    }
 
-  // ใช้ && (AND) : ต้องถูกต้อง "ทุกเงื่อนไข" ถึงจะ login ผ่าน
-  if (isUsernameCorrect && isPasswordCorrect && registeredUser.isActive) {
-    return "เข้าสู่ระบบสำเร็จ ✅";
-  }
+    // 3. ตรวจสอบอายุว่าถึงเกณฑ์หรือไม่
+    if (age < 18) {
+        return "อายุไม่ถึงเกณฑ์";
+    }
 
-  // ใช้ || (OR) : ถ้าเงื่อนไขใดเงื่อนไขหนึ่งผิด ให้บอกสาเหตุ
-  if (!isUsernameCorrect || !isPasswordCorrect) {
-    return "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง ❌";
-  }
+    // 4. ถ้าเป็นอาจารย์ ให้สิทธิ์ผู้ดูแล
+    if (role === "อาจารย์") {
+        return "เข้าสู่ระบบสำเร็จ (สิทธิ์ผู้ดูแล)";
+    }
 
-  if (!registeredUser.isActive) {
-    return "บัญชีนี้ถูกระงับการใช้งาน ❌";
-  }
+    // 5. ถ้าเป็นนักศึกษา ให้สิทธิ์ทั่วไป
+    if (role === "นักศึกษา") {
+        return "เข้าสู่ระบบสำเร็จ (สิทธิ์ทั่วไป)";
+    }
 
-  return "ไม่สามารถเข้าสู่ระบบได้ ❌";
+    // ถ้า role ไม่ตรงกับที่กำหนด
+    return "ไม่พบสิทธิ์ผู้ใช้งาน";
 }
 
-// ทดสอบ login หลายกรณี
-console.log(login("student01", "1234abcd")); // ถูกทั้งคู่ -> สำเร็จ
-console.log(login("student01", "wrongpass")); // รหัสผ่านผิด
-console.log(login("wronguser", "1234abcd")); // username ผิด
 
-// ฟังก์ชันตรวจสอบสิทธิ์การเข้าถึงหน้า admin
-function canAccessAdminPage(role, isActive) {
-  // ต้องเป็น role "admin" (===) และบัญชีต้อง active (&&) เท่านั้น
-  const hasAccess = role === "admin" && isActive === true;
-  return hasAccess;
-}
+// ทดสอบอย่างน้อย 6 กรณี
+console.log("กรณี 1:", login("admin", "ce385pass", "อาจารย์", true, 30));
+console.log("กรณี 2:", login("admin", "ce385pass", "นักศึกษา", true, 20));
+console.log("กรณี 3:", login("admin", "wrongpass", "อาจารย์", true, 30));
+console.log("กรณี 4:", login("admin", "ce385pass", "นักศึกษา", false, 20));
+console.log("กรณี 5:", login("admin", "ce385pass", "นักศึกษา", true, 17));
+console.log("กรณี 6:", login("admin", "ce385pass", "นักศึกษา", true, 20));
 
-console.log(`admin ที่ active เข้าหน้า admin ได้ไหม: ${canAccessAdminPage("admin", true)}`);
-console.log(`student เข้าหน้า admin ได้ไหม: ${canAccessAdminPage("student", true)}`);
-console.log(`admin ที่ถูกระงับเข้าหน้า admin ได้ไหม: ${canAccessAdminPage("admin", false)}`);
 
-// ตัวอย่างการใช้ || เพื่อกำหนดค่า default (ถ้าค่าที่ได้ไม่มี/ว่างเปล่า)
-function getDisplayRole(role) {
-  // ถ้า role เป็นค่าว่างหรือ falsy จะใช้ "guest" แทน
-  return role || "guest";
-}
-
-console.log(`role: ${getDisplayRole("")}`);
-console.log(`role: ${getDisplayRole("student")}`);
+// คำถามท้ายข้อ
+// 1. ต้องตรวจ username/password ก่อน role เพราะเป็นขั้นตอนยืนยันตัวตน
+//    หากข้อมูลเข้าสู่ระบบไม่ถูกต้อง จะไม่ควรตรวจสิทธิ์ของผู้ใช้ต่อ
+//
+// 2. ถ้าย้ายการตรวจ "อายุไม่ถึงเกณฑ์" ขึ้นไปเป็นข้อแรก
+//    อาจทำให้ผู้ที่ username/password ผิด เเละอาจได้รับข้อความเกี่ยวกับอายุอาจเป็น
+//    การเปิดเผยข้อมูลที่ไม่ควรเปิดเผยโดยไม่จําเป็น 

@@ -1,37 +1,47 @@
-// ex2-types.js
-// แบบฝึกหัด: ชนิดข้อมูล (Data Types) และการใช้ typeof, null vs undefined
+// ส่วนที่ 1: สร้างตัวแปรให้ครบ 6 ชนิดข้อมูล
+const myString = "สวัสดี";
+const myNumber = 22;
+const myBoolean = true;
+let myUndefined;
+const myNull = null;
+const myArray = ["JavaScript", "HTML", "CSS"];
 
-// ตัวแปรแต่ละชนิดข้อมูลพื้นฐานใน JavaScript
-const studentName = "ธนบดี";      // String
-const studentAge = 22;              // Number
-const isPassed = true;              // Boolean
-const scores = [85, 90, 78];        // Object (Array)
-const studentInfo = {               // Object
-  name: studentName,
-  age: studentAge,
-};
+// แสดงค่าและชนิดข้อมูลของแต่ละตัวแปร
+console.log("ค่า:", myString, "| ชนิด:", typeof myString);
+console.log("ค่า:", myNumber, "| ชนิด:", typeof myNumber);
+console.log("ค่า:", myBoolean, "| ชนิด:", typeof myBoolean);
+console.log("ค่า:", myUndefined, "| ชนิด:", typeof myUndefined);
+console.log("ค่า:", myNull, "| ชนิด:", typeof myNull);
+console.log("ค่า:", myArray, "| ชนิด:", typeof myArray);
 
-// ตัวแปรที่ยังไม่ได้กำหนดค่า -> undefined
-let phoneNumber;
 
-// ตัวแปรที่ตั้งใจกำหนดให้ "ไม่มีค่า" -> null
-let middleName = null;
+// ส่วนที่ 2: ตอบคำถามเกี่ยวกับ typeof
+console.log("typeof null =", typeof null);
+console.log("typeof null เป็น object จริงหรือไม่ =", typeof null === "object");
 
-// ใช้ typeof เพื่อตรวจสอบชนิดข้อมูลของแต่ละตัวแปร
-console.log(`studentName คือชนิด: ${typeof studentName}`);
-console.log(`studentAge คือชนิด: ${typeof studentAge}`);
-console.log(`isPassed คือชนิด: ${typeof isPassed}`);
-console.log(`scores คือชนิด: ${typeof scores}`);
-console.log(`studentInfo คือชนิด: ${typeof studentInfo}`);
-console.log(`phoneNumber คือชนิด: ${typeof phoneNumber}`);
-// หมายเหตุ: typeof null จะได้ "object" ซึ่งเป็นจุดแปลก (bug) ที่มีมาตั้งแต่ JS เวอร์ชันแรก
-console.log(`middleName คือชนิด: ${typeof middleName}`);
+console.log("ตัวแปรที่ประกาศแล้วแต่ยังไม่กำหนดค่า มีชนิดเป็น =", typeof myUndefined);
 
-// เปรียบเทียบ null กับ undefined ด้วย ===
-console.log(`middleName === null : ${middleName === null}`);
-console.log(`phoneNumber === undefined : ${phoneNumber === undefined}`);
-console.log(`null === undefined : ${null === undefined}`); // false เพราะคนละชนิดข้อมูล
+const myNaN = Number("abc");
+console.log("typeof NaN =", typeof myNaN);
 
-// สรุปความหมาย
-console.log("undefined = ยังไม่ได้กำหนดค่าให้ตัวแปร (ระบบตั้งให้อัตโนมัติ)");
-console.log("null = ตั้งใจกำหนดว่า 'ไม่มีค่า' โดยผู้เขียนโค้ดเอง");
+
+// ส่วนที่ 3: การแปลงชนิดข้อมูล
+const inputAge = "20";
+const inputScore = "85.5";
+
+// แปลง inputAge จาก string เป็น number
+const ageNumber = Number(inputAge);
+
+// แปลง inputScore เป็น number และแสดงทศนิยม 1 ตำแหน่ง
+const scoreNumber = Number(inputScore);
+
+console.log("inputAge =", inputAge);
+console.log("หลังแปลง inputAge =", ageNumber);
+console.log("inputAge === 20 =", inputAge === 20);
+console.log("Number(inputAge) === 20 =", Number(inputAge) === 20);
+
+console.log("inputScore =", inputScore);
+console.log("หลังแปลง inputScore =", scoreNumber.toFixed(1));
+
+// ตรวจสอบ NaN
+console.log("myNaN เป็น NaN หรือไม่ =", Number.isNaN(myNaN));

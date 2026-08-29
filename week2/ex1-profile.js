@@ -1,21 +1,23 @@
-// ex1-profile.js
-// แบบฝึกหัด: แนะนำตัว โดยใช้ const, Template Literal และ comment
-
-// ประกาศตัวแปรข้อมูลส่วนตัวด้วย const (ห้ามใช้ var)
+// ข้อมูลส่วนตัว
+const name = "แบงค์";
 const studentId = "67112211";
-const firstName = "ธนบดี";
-const lastName = "หมื่นไกรทอง";
+const age = 22;
 const major = "วิศวกรรมคอมพิวเตอร์";
-const year = 3;
 
-// ใช้ Template Literal (backtick + ${}) แทนการต่อ string ด้วย +
-const introText = `สวัสดีครับ ผมชื่อ ${firstName} ${lastName}
-รหัสนักศึกษา: ${studentId}
-สาขา: ${major} ชั้นปีที่ ${year}`;
+// สมมติว่าเหลือเวลาเรียนอีก 2 ปี และปีปัจจุบันคือ พ.ศ. 2569
+const remainingYears = 2;
+const graduationYear = 2569 + remainingYears;
 
-// แสดงผลลัพธ์
-console.log(introText);
+// จำนวนวิชาที่ลงทะเบียน สมมติว่าลงทะเบียนเต็มตารางเรียน
+const courses = 5;
 
-// ตัวอย่าง Template Literal แบบคำนวณในตัว {} ได้ด้วย
-const nextYear = year + 1;
-console.log(`ปีหน้าผมจะขึ้นชั้นปีที่ ${nextYear}`); 
+
+// แสดงผลด้วย Template Literal
+console.log(`===== บัตรแนะนำตัว =====
+ชื่อเล่น       : ${name}
+รหัสนักศึกษา   : ${studentId}
+อายุ           : ${age} ปี
+สาขาวิชา       : ${major}
+ลงทะเบียน      : ${courses} วิชา
+ปีที่จะจบ      : ${graduationYear}
+========================`);
