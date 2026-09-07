@@ -13,7 +13,11 @@
 // (คัดลอก) ข้อมูลนักศึกษาจากข้อ 1 มาไว้ในไฟล์นี้
 // ------------------------------------------------------------
 const students = [
-  // TODO: copy ข้อมูลจาก ex1-callback.js มาวางตรงนี้
+  { id: "6701", name: "นายซิกเซเว้น", major: "วิศวกรรมคอมพิวเตอร์", score: 85 },
+  { id: "6702", name: "นางสาวซิกเอท", major: "วิศวกรรมไฟฟ้า", score: 92 },
+  { id: "6703", name: "นายซิกไนน์", major: "วิศวกรรมเครื่องกล", score: 78 },
+  { id: "6704", name: "นางสาวซิกเท็น", major: "วิศวกรรมโยธา", score: 88 },
+  { id: "6501", name: "นายหกห้า", major: "วิศวกรรมคอมพิวเตอร์", score: 85 },
 ];
 
 // ------------------------------------------------------------
@@ -26,9 +30,21 @@ const students = [
 //       callback(err, x) -> reject(err) / resolve(x)
 function fetchStudentByIdAsync(id) {
   return new Promise((resolve, reject) => {
-    // TODO: ตรวจสอบ id ก่อน -> reject ถ้าผิด
+    if (typeof id !== "string" || id.trim() === "") {
+      reject(new Error("รหัสนักศึกษาไม่ถูกต้อง"));
+      return;
+    }
 
-    // TODO: setTimeout(() => { ... }, 300) แล้วค้นหา + resolve/reject
+    setTimeout(() => {
+      const student = students.find((item) => item.id === id);
+
+      if (!student) {
+        reject(new Error(`ไม่พบรหัสนักศึกษา ${id}`));
+        return;
+      }
+
+      resolve({ ...student });
+    }, 300);
   });
 }
 
@@ -38,13 +54,40 @@ function fetchStudentByIdAsync(id) {
 // ------------------------------------------------------------
 
 // a) id ที่มีจริง
-// TODO: fetchStudentByIdAsync('....').then(...).catch(...).finally(...)
+fetchStudentByIdAsync("6701")
+  .then((student) => {
+    return console.log("สำเร็จ:", student.name);
+  })
+  .catch((error) => {
+    console.error(error.message);
+  })
+  .finally(() => {
+    console.log("จบกรณี a");
+  });
 
 // b) id ที่ไม่มี
-// TODO
+fetchStudentByIdAsync("6742")
+  .then((student) => {
+    return console.log("สำเร็จ:", student.name);
+  })
+  .catch((error) => {
+    console.error(error.message);
+  })
+  .finally(() => {
+    console.log("จบกรณี b");
+  });
 
 // c) id ผิดรูปแบบ
-// TODO
+fetchStudentByIdAsync(42)
+  .then((student) => {
+    return console.log("สำเร็จ:", student.name);
+  })
+  .catch((error) => {
+    console.error(error.message);
+  })
+  .finally(() => {
+    console.log("จบกรณี c");
+  });
 
 // ------------------------------------------------------------
 // ส่วนที่ 3 — เขียน "โซ่" 3 ขั้น แต่ละขั้นต้อง return ส่งต่อ
@@ -54,18 +97,20 @@ function fetchStudentByIdAsync(id) {
 //   -> ขั้น 2: แปลงเป็นข้อความรายงาน 1 บรรทัด
 //   -> ขั้น 3: พิมพ์ออกทาง console
 //
-// TODO:
-// fetchStudentByIdAsync('6501')
-//   .then((student) => {
-//     // TODO: return { name: student.name, grade: ... }
-//   })
-//   .then((info) => {
-//     // TODO: return ข้อความรายงาน 1 บรรทัด
-//   })
-//   .then((line) => {
-//     // TODO: console.log(line)
-//   })
-//   .catch((error) => { /* TODO */ });
+fetchStudentByIdAsync("6501")
+  .then((student) => {
+    const grade = student.score >= 80 ? "A" : student.score >= 70 ? "B" : student.score >= 60 ? "C" : student.score >= 50 ? "D" : "F";
+    return { name: student.name, grade };
+  })
+  .then((info) => {
+    return `นักศึกษา ${info.name} ได้เกรด ${info.grade}`;
+  })
+  .then((line) => {
+    return console.log(line);
+  })
+  .catch((error) => {
+    console.error(error.message);
+  });
 
 // ------------------------------------------------------------
 // ส่วนที่ 4 (โบนัส +0.5) — promisify(fn)
@@ -73,9 +118,26 @@ function fetchStudentByIdAsync(id) {
 // รับฟังก์ชัน error-first ใด ๆ คืนเวอร์ชัน Promise
 // ทดสอบกับฟังก์ชันตัวอย่างอื่นนอกจากข้อ 1
 function promisify(fn) {
-  // TODO: return (...args) => new Promise((resolve, reject) => {
-  //   fn(...args, (err, result) => { ... });
-  // });
+  return (...args) => new Promise((resolve, reject) => {
+    fn(...args, (error, result) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+
+      resolve(result);
+    });
+  });
 }
 
-// TODO: ทดสอบ promisify กับฟังก์ชัน error-first ตัวอย่างอื่น (ไม่ใช่ fetchStudentById)
+function addAsync(firstNumber, secondNumber, callback) {
+  setTimeout(() => callback(null, firstNumber + secondNumber), 100);
+}
+
+promisify(addAsync)(2, 3)
+  .then((result) => {
+    return console.log("ผลบวก:", result);
+  })
+  .catch((error) => {
+    console.error(error.message);
+  });
