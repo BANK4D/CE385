@@ -20,4 +20,4 @@ fetchStudentById("6501")
   })
   .finally(() => {
     console.log("finally : ทำงานเสมอ — ปิดการเชื่อมต่อ/ซ่อนตัวโหลดหมุน");
-  });
+  }); 
