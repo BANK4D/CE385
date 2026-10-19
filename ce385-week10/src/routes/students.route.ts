@@ -1,61 +1,45 @@
+// src/routes/students.route.ts — แผนที่ของเส้นทาง
+// อ่านไฟล์นี้ไฟล์เดียวต้องตอบได้ว่า มี method + path อะไรบ้าง · ใช้ schema ไหนตรวจ · ส่งต่อให้ controller ตัวไหน
+// ไม่มีโค้ดที่ "ทำงาน" อยู่ในไฟล์นี้อีกแล้ว
 import { Router } from "express";
+import * as studentController from "../controllers/student.controller.js";
 import { asyncHandler } from "../middlewares/async-handler.js";
 import { validate } from "../middlewares/validate.js";
 import {
-  createStudentSchema, listStudentsQuerySchema, studentIdParamSchema, updateStudentSchema,
-  type CreateStudentInput, type ListStudentsQuery, type UpdateStudentInput,
+  createStudentSchema,
+  listStudentsQuerySchema,
+  studentIdParamSchema,
+  updateStudentSchema,
 } from "../schemas/student.schema.js";
-import * as studentService from "../services/student.service.js";
 
 export const studentsRouter = Router();
 
 studentsRouter.get(
   "/",
   validate({ query: listStudentsQuerySchema }),
-  asyncHandler(async (_req, res) => {
-    const query: ListStudentsQuery = res.locals.valid.query;
-    const result = await studentService.listStudents(query);
-    res.status(200).json(result);
-  }),
+  asyncHandler(studentController.list),
 );
 
 studentsRouter.get(
   "/:id",
   validate({ params: studentIdParamSchema }),
-  asyncHandler(async (_req, res) => {
-    const { id } = res.locals.valid.params as { id: string };
-    const student = await studentService.getStudentById(id);
-    res.status(200).json({ data: student });
-  }),
+  asyncHandler(studentController.getById),
 );
 
 studentsRouter.post(
   "/",
   validate({ body: createStudentSchema }),
-  asyncHandler(async (_req, res) => {
-    const input: CreateStudentInput = res.locals.valid.body;
-    const created = await studentService.createStudent(input);
-    res.status(201).location(`/api/v1/students/${created.id}`).json({ data: created });
-  }),
+  asyncHandler(studentController.create),
 );
 
 studentsRouter.patch(
   "/:id",
   validate({ params: studentIdParamSchema, body: updateStudentSchema }),
-  asyncHandler(async (_req, res) => {
-    const { id } = res.locals.valid.params as { id: string };
-    const input: UpdateStudentInput = res.locals.valid.body;
-    const updated = await studentService.updateStudent(id, input);
-    res.status(200).json({ data: updated });
-  }),
+  asyncHandler(studentController.update),
 );
 
 studentsRouter.delete(
   "/:id",
   validate({ params: studentIdParamSchema }),
-  asyncHandler(async (_req, res) => {
-    const { id } = res.locals.valid.params as { id: string };
-    await studentService.deleteStudent(id);
-    res.status(204).end();
-  }),
+  asyncHandler(studentController.remove),
 );
